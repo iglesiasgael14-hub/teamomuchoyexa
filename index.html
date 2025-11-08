@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+<head>
+  <meta charset="UTF-8">
+  <title>La Llave para la Cartita</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 50px 0;
+      font-family: Arial, sans-serif;
+      color: #333;
+      text-align: center;
+      overflow-x: hidden;
+      background: linear-gradient(135deg, #ffeef2, #f9f5f2, #fffaf0);
+      background-size: 300% 300%;
+      animation: gradientShift 15s ease infinite;
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    #gameContainer {
+      position: relative;
+      max-width: 600px;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.9);
+      padding: 30px;
+      border: 2px solid #e0d6d2;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      overflow: hidden;
+    }
+
+    /* Muchísimos brillitos más grandes */
+    .sparkle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: rgba(217,111,125,0.8);
+      border-radius: 50%;
+      box-shadow: 0 0 6px rgba(217,111,125,0.8), 0 0 12px rgba(217,111,125,0.6);
+      animation: sparkleMove 4s linear infinite;
+      opacity: 0;
+    }
+    @keyframes sparkleMove {
+      0%   { transform: translate(0,0) scale(0.5); opacity:0; }
+      25%  { opacity:0.7; }
+      50%  { transform: translate(-100px,-150px) scale(1.2); opacity:1; }
+      100% { transform: translate(-200px,-300px) scale(0.8); opacity:0; }
+    }
+
+    .hidden { display: none; }
+
+    .button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      background: #d96f7d;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    .button:hover {
+      background: #c65d6a;
+      transform: scale(1.05);
+    }
+
+    input[type=text], textarea {
+      padding: 8px;
+      font-size: 16px;
+      width: 80%;
+      margin: 10px 0;
+      border: 1px solid #e0d6d2;
+      border-radius: 5px;
+    }
+
+    #letter {
+      margin-top: 20px;
+      background: #ffeeee;
+      padding: 20px;
+      border: 1px solid #e0b0b0;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      text-align: left;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div id="gameContainer">
+    <h1>Cartita para ti (otra vez)</h1>
+    <p>Olaaa Yexinii, tienes que contestar unas preguntitas para desbloquear la cartita que te hice.</p>
+
+    <div id="step1">
+      <h2>Reto 1</h2>
+      <p>Piensa en un momento en el que fuiste feliz a mi lado :,c :</p>
+      <textarea id="input1" rows="3"></textarea><br>
+      <button class="button" onclick="submitStep1()">Enviar</button>
+    </div>
+
+    <div id="step2" class="hidden">
+      <h2>Reto 2</h2>
+      <p>Elige una palabra que describa cómo te sientes cuando estás conmigo alvvv:</p>
+      <input type="text" id="input2" placeholder="Por ejemplo: alegre"><br>
+      <button class="button" onclick="submitStep2()">Enviar</button>
+    </div>
+
+    <div id="step3" class="hidden">
+      <h2>Reto 3</h2>
+      <p>Recuerda un objeto que te recuerde a mí y escríbelo:</p>
+      <input type="text" id="input3" placeholder="Por ejemplo: una bufanda"><br>
+      <button class="button" onclick="submitStep3()">Enviar</button>
+    </div>
+
+    <div id="unlock" class="hidden">
+      <h2>¡Listo!</h2>
+      <p>Has respondido todas las preguntas. No sé qué fue lo que pusiste ahí, pero te quiero :D. Cuando quieras, pulsa el botón para abrir la carta:</p>
+      <button class="button" onclick="openLetter()">Abrir la carta</button>
+    </div>
+
+    <div id="letter" class="hidden">
+      <h2>Cartita para ti Yexini</h2>
+      <p>Querida Yexa,</p>
+      <p>Hoy quiero decirte lo mucho que significas para mí. Cada vez que pienso en ti mi corazón pummm explota alv, —<span id="momentsHere"></span>— siento mi corazón llenarse de alegría. Cuando estoy contigo me siento <span id="feelingHere"></span>, y cada vez que veo tu <span id="objectHere"></span> recuerdo lo afortunado que soy de tenerte a mi lado.</p>
+      <p>Gracias por ser mi twin, gracias por hablar conmigo todos los días a pesar de que soy enfadoso, gracias por aguantarme, gracias por no dejarme de hablar aun sabiendo todo lo que siento por ti, no bromeo cuando te digo que te amo, cuando te digo que me gustas, cuando te digo que contigo lo tengo todo.</p>
+      <p>Con todo mi cariño, para la niña más bonita del mundo, para la princesa, para la dueña de mi corazón alvvv, para tiii Yexini,</p>
+      <p>Gaelini</p>
+    </div>
+
+    <!-- Agregar muchos brillitos en varias posiciones -->
+    <div class="sparkle" style="top:5%; left:10%; animation-delay:0s;"></div>
+    <div class="sparkle" style="top:15%; left:80%; animation-delay:0.5s;"></div>
+    <div class="sparkle" style="top:25%; left:40%; animation-delay:1s;"></div>
+    <div class="sparkle" style="top:35%; left:60%; animation-delay:1.5s;"></div>
+    <div class="sparkle" style="top:45%; left:20%; animation-delay:2s;"></div>
+    <div class="sparkle" style="top:55%; left:70%; animation-delay:2.5s;"></div>
+    <div class="sparkle" style="top:65%; left:30%; animation-delay:3s;"></div>
+    <div class="sparkle" style="top:75%; left:85%; animation-delay:3.5s;"></div>
+    <div class="sparkle" style="top:85%; left:50%; animation-delay:4s;"></div>
+
+  </div>
+
+  <script>
+    let moments = "";
+    let feeling = "";
+    let objectRec = "";
+
+    function submitStep1() {
+      const val = document.getElementById("input1").value.trim();
+      if (!val) {
+        alert("Por favor, escribe un momento feliz.");
+        return;
+      }
+      moments = val;
+      document.getElementById("step1").classList.add("hidden");
+      document.getElementById("step2").classList.remove("hidden");
+    }
+    function submitStep2() {
+      const val = document.getElementById("input2").value.trim();
+      if (!val) {
+        alert("Por favor, escribe una palabra.");
+        return;
+      }
+      feeling = val;
+      document.getElementById("step2").classList.add("hidden");
+      document.getElementById("step3").classList.remove("hidden");
+    }
+    function submitStep3() {
+      const val = document.getElementById("input3").value.trim();
+      if (!val) {
+        alert("Por favor, escribe un objeto.");
+        return;
+      }
+      objectRec = val;
+      document.getElementById("step3").classList.add("hidden");
+      document.getElementById("unlock").classList.remove("hidden");
+    }
+    function openLetter() {
+      document.getElementById("unlock").classList.add("hidden");
+      document.getElementById("momentsHere").textContent = moments;
+      document.getElementById("feelingHere").textContent = feeling;
+      document.getElementById("objectHere").textContent = objectRec;
+      document.getElementById("letter").classList.remove("hidden");
+    }
+  </script>
+</body>
+</html>
